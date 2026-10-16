@@ -1,13 +1,14 @@
-// Prime numbers in Arduino C v5.4 2026/05/11 for WaveShare RP2350 
-// 2026-10-08 new run
+// Prime numbers in Arduino C v5.4 2026/05/11 for WaveShare RP2350
+// https://github.com/kreier/rp2350
+// 2026-10-16 new run
 
 #include <time.h>
 #include <math.h>
 #include <EEPROM.h>
 
 #define LED_PIN      25
-#define MACHINELABEL "ARM M33 150 MHz"
-#define STARTDATE    "2026/10/08"
+#define MACHINELABEL "RISC-V 200 MHz"
+#define STARTDATE    "2026/10/16"
 
 double start;
 int column = 10;
@@ -115,7 +116,7 @@ void setup() {
     Serial.print(scope[i]);
     Serial.print("    ");
     float last_time;
-    EEPROM.get(i * 4 + 1, last_time);
+    EEPROM.get(i * 4, last_time);
     Serial.print(last_time, 6);    
     // Serial.print(preferences.getFloat(pref[i], 0), 6);
     Serial.print("\n");
@@ -188,7 +189,7 @@ void setup() {
     Serial.print(duration, 6);
     Serial.print(" seconds.");
     elapsed_time(duration);
-    EEPROM.put(i * 4 + 1, duration);
+    EEPROM.put(i * 4, duration);
     boolean ok1 = EEPROM.commit();
     Serial.println((ok1) ? "First commit OK" : "Commit failed");    
     // preferences.begin("prime", false);
