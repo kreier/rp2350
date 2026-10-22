@@ -1,14 +1,14 @@
 // Prime numbers in Arduino C v5.4 2026/05/11 for WaveShare RP2350
 // https://github.com/kreier/rp2350
-// 2026-10-16 new run
+// 2026-10-22 new run
 
 #include <time.h>
 #include <math.h>
 #include <EEPROM.h>
 
 #define LED_PIN      25
-#define MACHINELABEL "RISC-V 200 MHz"
-#define STARTDATE    "2026/10/16"
+#define MACHINELABEL "ARM M33 200 MHz"
+#define STARTDATE    "2026/10/22"
 
 double start;
 int column = 10;

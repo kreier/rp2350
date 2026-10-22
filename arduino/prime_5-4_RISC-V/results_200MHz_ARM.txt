@@ -1,8 +1,8 @@
 Calculating prime numbers in Arduino C v5.4.2026
 2026/05/11
-Raspberry Pi Pico 2 - 2350 with 150 MHz and one LED
+WaveShare RP2350-Plus
 
-Get previous results for this Waveshare rp2350:
+    last        seconds   
     last        seconds   
          100    0.000180
         1000    0.000918
@@ -15,3 +15,5 @@ Get previous results for this Waveshare rp2350:
   1000000000    
   2147483647    63596.300781
   4294967295    
+
+Current setup: ARM M33 200 MHz
