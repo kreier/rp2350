@@ -1,6 +1,6 @@
 // Prime numbers in Arduino C v5.4 2026/05/11 for WaveShare RP2350
 // https://github.com/kreier/rp2350
-// 2026-10-22 new run
+// 2026-10-28 new run
 
 #include <time.h>
 #include <math.h>
@@ -8,7 +8,8 @@
 
 #define LED_PIN      25
 #define MACHINELABEL "ARM M33 200 MHz"
-#define STARTDATE    "2026/10/22"
+#define STARTDATE    "2026/10/28"
+#define STARTEEPROM  45
 
 double start;
 int column = 10;
@@ -48,12 +49,8 @@ int find_primes(int limit) {
 int is_prime_fast(uint32_t number) {
   int largest_divider = (int)(sqrt(number));
   int flag_prime = 1;
-  // Serial.print(number);
-  // Serial.print(" - ");
   for(int i=0; i < divisors; i++)
   {
-    // Serial.print(primes[i]);
-    // Serial.print(" ");
     if(number % primes[i] == 0) 
     {
       flag_prime = 0;
@@ -64,7 +61,6 @@ int is_prime_fast(uint32_t number) {
       break;
     }
   }
-  // Serial.print("\n");
   return flag_prime;
 }
 
@@ -95,16 +91,8 @@ void setup() {
   const uint32_t scope[] = {100, 1000, 10000, 100000, 1000000, 10000000, 25000000, 100000000, 1000000000, 2147483647, 4294967295};
   const int reference[] = {25, 168, 1229, 9592, 78498, 664579, 1565927, 5761455, 50847534, 105097564, 203280221};
 
-
-
   // previous run
-  EEPROM.begin(44);
-  // for(int i=0; i < 44; i++) {
-  //   int value = EEPROM.read(i);
-  //   Serial.print(i);
-  //   Serial.print(": ");
-  //   Serial.println(value);
-  // }
+  EEPROM.begin(STARTEEPROM);
   const char* pref[] = {"p100", "p1000", "p10000", "p100000", "p1000000", "p10000000", "p25000000", "p100000000", "p1000000000", "p2147483647", "p4294967295"};
   Serial.print("\nGet previous results for this rp2350:\n");
   Serial.print("    last        seconds   \n");
@@ -117,26 +105,22 @@ void setup() {
     Serial.print("    ");
     float last_time;
     EEPROM.get(i * 4, last_time);
-    Serial.print(last_time, 6);    
-    // Serial.print(preferences.getFloat(pref[i], 0), 6);
+    Serial.print(last_time, 6);
     Serial.print("\n");
   }
   Serial.print("\nCurrent setup: ");
   Serial.print(MACHINELABEL);
   Serial.print("\n");
-  // preferences.end();
   delay(1000);
-  // led(GREEN);
-
-
 
   // start calculating with micros() until 100 million
-  for (int i = 0; i < 8; i++) // 8
+  for (int i = 0; i < 4; i++) // 8
   {
     int last = scope[i];
     found = 4;   // we already know 2, 3, 5, 7
     Serial.print("\n\nPrime v5.4 in Arduino C - ");
     Serial.print(STARTDATE);
+    Serial.print(" - in microseconds");
     Serial.print("\nCalculating prime numbers until ");
     Serial.println(last);
     start = micros();      // use micros() for more precision
@@ -191,23 +175,18 @@ void setup() {
     elapsed_time(duration);
     EEPROM.put(i * 4, duration);
     boolean ok1 = EEPROM.commit();
-    Serial.println((ok1) ? "First commit OK" : "Commit failed");    
-    // preferences.begin("prime", false);
-    // preferences.putFloat(pref[i], duration);
-    // preferences.end();
+    Serial.println((ok1) ? "First commit OK" : "Commit failed");
   }
 
-
-
-
-
-  // start calculating with millis() from 1 billion
-  for (int i = 9; i < 11; i++)
+  // start calculating with millis() from 1 billion  ********************
+  for (int i = 4; i < 11; i++)
   {
     uint32_t last = scope[i];
     float last100 = last / 100.0;
     found = 4;   // we already know 2, 3, 5, 7
-    Serial.println("\n\nPrime v5.4 in Arduino C - 2026/05/11");
+    Serial.print("\n\nPrime v5.4 in Arduino C - ");
+    Serial.print(STARTDATE);
+    Serial.print(" - in milliseconds\n");
     Serial.print("Calculating prime numbers until ");
     Serial.println(last);
     start = millis();
@@ -260,14 +239,10 @@ void setup() {
     Serial.print(duration, 6);
     Serial.print(" seconds.");
     elapsed_time(duration);
-    EEPROM.put(i * 4 + 1, duration);
+    EEPROM.put(i * 4, duration);
     boolean ok1 = EEPROM.commit();
     Serial.println((ok1) ? "First commit OK" : "Commit failed");       
-    // preferences.begin("prime", false);
-    // preferences.putFloat(pref[i], duration);
-    // preferences.end();
   }
-  // preferences.end();
   Serial.print("\n");
 }
 
